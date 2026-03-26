@@ -1,31 +1,17 @@
-# You may modify this file as you wish, but `make animate.o` should always
-# compile all necessary code into a single object file.
+# `make animate.o` compiles all library code into a single object file.
 
 CC     = gcc
 CFLAGS = -fPIC -Wall -Wvla -Werror -fsanitize=address -g
-
 HEADERS = animate.h animate_internal.h
-
-# Source files that make up the library
-LIB_SRCS = animate.c canvas.c sprite.c placement.c frame.c
-
-# Intermediate objects (prefixed to avoid clashing with final animate.o)
-INT_OBJS = $(patsubst %.c,._int_%.o,$(LIB_SRCS))
 
 default: animate.o test_simple
 
-# Combine all intermediate objects into a single relocatable object
-animate.o: $(INT_OBJS)
-	ld -r -o $@ $^
-
-# Compile each library source to an intermediate object
-._int_%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c -o $@ $<
+animate.o: animate.c $(HEADERS)
+	$(CC) $(CFLAGS) -c animate.c -o $@
 
 test_simple: main_simple.c animate.o | animate.h
 	$(CC) -fPIC -fsanitize=address -g $^ -o $@
 
-# Tests
 .PHONY: test
 test: animate.o
 	@cd tests && bash run_all_tests.sh
@@ -54,8 +40,7 @@ $(API_DOC): Doxyfile | animate.h
 	cp latex/refman.pdf $@
 
 clean:
-	rm -f animate.o test_simple
-	rm -f ._int_*.o
+	rm -f animate.o test_simple simple.dat
 	rm -f Doxyfile
 	rm -rf latex
 
