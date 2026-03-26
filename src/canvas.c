@@ -31,12 +31,8 @@ void animate_destroy_canvas(struct canvas *canvas) {
 
     curr = canvas->head;
     while (curr != NULL) {
-        struct sprite *sp = curr->sprite;
         next = curr->next;
-        if (sp != NULL && sp->ref_count > 0) {
-            sp->ref_count--;
-        }
-        free(curr);
+        animate_destroy_placement(curr);
         curr = next;
     }
 
