@@ -104,15 +104,17 @@ struct sprite_placement *animate_place_sprite(struct canvas *canvas,
 }
 
 void animate_destroy_placement(struct sprite_placement *sprite_placement) {
+    struct sprite *sp;
+
     if (sprite_placement == NULL) {
         return;
     }
 
+    sp = sprite_placement->sprite;
     detach_placement(sprite_placement);
 
-    if (sprite_placement->sprite != NULL &&
-        sprite_placement->sprite->ref_count > 0) {
-        sprite_placement->sprite->ref_count--;
+    if (sp != NULL && sp->ref_count > 0) {
+        sp->ref_count--;
     }
 
     free(sprite_placement);
