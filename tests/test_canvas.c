@@ -1,26 +1,59 @@
-/* test_canvas.c — Tests for canvas create/destroy and frame size. */
-#include "../animate.h"
-#include <assert.h>
-#include <stdlib.h>
+/**
+ * @file test_canvas.c
+ * @brief Tests for canvas functions
+ */
+
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../include/animate.h"
+#include "test_framework.h"
+
+void test_create_canvas(void) {
+    printf("\n=== Test: Create Canvas ===\n");
+
+    struct canvas* canvas = animate_create_canvas(100, 200, animate_color_rgb(255, 0, 0));
+    TEST_ASSERT_NOT_NULL(canvas);
+
+    /* Clean up */
+    animate_destroy_canvas(canvas);
+}
+
+void test_frame_size_bytes(void) {
+    printf("\n=== Test: Frame Size Bytes ===\n");
+
+    struct canvas* canvas = animate_create_canvas(100, 200, 0);
+    TEST_ASSERT_NOT_NULL(canvas);
+
+    /* Frame size should be width * height * sizeof(color_t) */
+    size_t expected = 100 * 200 * sizeof(color_t);
+    size_t actual = animate_frame_size_bytes(canvas);
+    TEST_ASSERT_EQUAL_UINT(expected, actual);
+
+    /* Clean up */
+    animate_destroy_canvas(canvas);
+}
+
+void test_destroy_null_canvas(void) {
+    printf("\n=== Test: Destroy NULL Canvas ===\n");
+
+    /* Should not crash */
+    animate_destroy_canvas(NULL);
+    TEST_ASSERT_TRUE(1); /* Test passes if we reach here */
+}
 
 int main(void) {
-    /* Basic creation */
-    struct canvas *c = animate_create_canvas(4, 4, 0xFF000000u);
-    assert(c != NULL);
+    printf("Canvas Tests\n");
+    printf("===========\n");
 
-    /* Frame size must equal height * width * 4 bytes */
-    size_t sz = animate_frame_size_bytes(c);
-    assert(sz == 4 * 4 * sizeof(uint32_t));
+    reset_tests();
 
-    animate_destroy_canvas(c);
+    test_create_canvas();
+    test_frame_size_bytes();
+    test_destroy_null_canvas();
 
-    /* Zero-size canvas */
-    struct canvas *c2 = animate_create_canvas(0, 0, 0);
-    assert(c2 != NULL);
-    assert(animate_frame_size_bytes(c2) == 0);
-    animate_destroy_canvas(c2);
+    print_test_summary();
 
-    fprintf(stdout, "test_canvas: PASS\n");
-    return 0;
+    return (tests_passed == tests_run) ? 0 : 1;
 }

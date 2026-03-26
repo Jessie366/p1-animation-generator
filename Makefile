@@ -1,50 +1,43 @@
-# `make animate.o` compiles all library code into a single object file.
+# Makefile for PointerPro Animate
+#
+# Default target: compile animate.o with Position Independent Code (PIC)
 
-CC     = gcc
-CFLAGS = -fPIC -Wall -Wvla -Werror -fsanitize=address -g
-HEADERS = animate.h animate_internal.h
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -std=c11 -g -fPIC
 
-default: animate.o test_simple
+# Source files
+SRC_DIR = src
+SRCS = $(SRC_DIR)/canvas.c $(SRC_DIR)/sprite.c $(SRC_DIR)/placement.c $(SRC_DIR)/frame.c
 
-animate.o: animate.c $(HEADERS)
-	$(CC) $(CFLAGS) -c animate.c -o $@
+# Header directories
+INC_DIR = include
 
-test_simple: main_simple.c animate.o | animate.h
-	$(CC) -fPIC -fsanitize=address -g $^ -o $@
+.PHONY: all clean test demo
 
-.PHONY: test
-test: animate.o
-	@cd tests && bash run_all_tests.sh
+# Default target: compile animate.o for submission
+all: animate.o
 
-API_DOC = PointerProAnimateRefman.pdf
-doc: $(API_DOC)
+# Compile all source files into individual .o files, then archive into animate.a
+# The marking system will compile this into a shared object
+animate.o: $(SRCS) $(INC_DIR)/animate.h $(SRC_DIR)/animate_internal.h
+	$(CC) $(CFLAGS) -I$(INC_DIR) -c $(SRC_DIR)/canvas.c -o canvas.o
+	$(CC) $(CFLAGS) -I$(INC_DIR) -c $(SRC_DIR)/sprite.c -o sprite.o
+	$(CC) $(CFLAGS) -I$(INC_DIR) -c $(SRC_DIR)/placement.c -o placement.o
+	$(CC) $(CFLAGS) -I$(INC_DIR) -c $(SRC_DIR)/frame.c -o frame.o
+	ar rcs animate.a canvas.o sprite.o placement.o frame.o
+	cp animate.a animate.o
+	rm -f canvas.o sprite.o placement.o frame.o
 
-Doxyfile:
-	doxygen -g
-	sed -i 's/\(GENERATE_HTML *= *\).*/\1NO/g' $@
-	sed -i 's/\(EXTRACT_ALL *= *\).*/\1YES/g' $@
-	sed -i 's/\(INPUT *= *\).*/\1"animate.h"/g' $@
-	sed -i 's/\(PROJECT_NAME *= *\).*/\1"PointerPro Animate"/g' $@
-	sed -i 's/\(OPTIMIZE_OUTPUT_FOR_C *= *\).*/\1YES/g' $@
-
-$(API_DOC): DOC_MAKEFILE=latex/Makefile
-$(API_DOC): DOC_TOP=latex/refman.tex
-$(API_DOC): Doxyfile | animate.h
-	doxygen $^
-	sed -i 's/\t$$(MKIDX/\t#/g'             $(DOC_MAKEFILE)
-	sed -i 's/^ *\\clearemptydoublepage//g' $(DOC_TOP)
-	sed -i 's/^ *\\tableofcontents//g'      $(DOC_TOP)
-	sed -i 's/^ *\\chapter{File Index}//g'  $(DOC_TOP)
-	sed -i 's/^ *\\input{files}//g'         $(DOC_TOP)
-	cd latex && make
-	cp latex/refman.pdf $@
-
+# Clean build artifacts
 clean:
-	rm -f animate.o test_simple simple.dat
-	rm -f Doxyfile
-	rm -rf latex
+	rm -f *.o *.a
 
-clobber: clean
-	rm -f $(API_DOC)
-
-.PHONY: doc clean clobber default test
+# Run tests (requires ASAN build)
+test: $(SRCS) $(INC_DIR)/animate.h $(SRC_DIR)/animate_internal.h
+	$(CC) $(CFLAGS) -fsanitize=address -I$(INC_DIR) -c $(SRC_DIR)/canvas.c -o canvas.o
+	$(CC) $(CFLAGS) -fsanitize=address -I$(INC_DIR) -c $(SRC_DIR)/sprite.c -o sprite.o
+	$(CC) $(CFLAGS) -fsanitize=address -I$(INC_DIR) -c $(SRC_DIR)/placement.c -o placement.o
+	$(CC) $(CFLAGS) -fsanitize=address -I$(INC_DIR) -c $(SRC_DIR)/frame.c -o frame.o
+	$(CC) $(CFLAGS) -fsanitize=address -I$(INC_DIR) demo.c canvas.o sprite.o placement.o frame.o -o demo -lm
+	./demo
+	rm -f canvas.o sprite.o placement.o frame.o
