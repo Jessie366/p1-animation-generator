@@ -264,7 +264,7 @@ struct sprite *animate_create_circle(size_t radius, color_t c, bool filled) {
             ssize_t dy = (ssize_t)y - (ssize_t)center;
             ssize_t dist2 = dx * dx + dy * dy;
 
-            if ((size_t)dist2 < rr) {
+            if ((size_t)dist2 <= rr) {
                 sprite->pixels[idx] = c;
             } else {
                 sprite->pixels[idx] = 0;
