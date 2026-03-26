@@ -31,9 +31,11 @@ void animate_destroy_canvas(struct canvas *canvas) {
 
     curr = canvas->head;
     while (curr != NULL) {
-        /* Save next before animate_destroy_placement zeros it via detach. */
         next = curr->next;
-        animate_destroy_placement(curr);
+        if (curr->sprite != NULL && curr->sprite->ref_count > 0) {
+            curr->sprite->ref_count--;
+        }
+        free(curr);
         curr = next;
     }
 
