@@ -32,6 +32,10 @@ struct sprite_placement {
     ssize_t ax;
     ssize_t ay;
 
+    /* Optional custom animation function (NULL if not set). */
+    animate_fn anim_fn;
+    void *anim_priv;
+
     struct sprite_placement *prev;
     struct sprite_placement *next;
 };

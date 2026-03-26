@@ -63,16 +63,22 @@ void animate_generate_frame(struct canvas *canvas,
 
         if (sprite != NULL) {
             /* float->ssize_t truncates toward zero (C11 §6.3.1.4). */
-            base_x = (ssize_t)(
-                (float)placement->x +
-                (float)placement->vx * t +
-                ((float)placement->ax * t * t) / 2.0f
-            );
-            base_y = (ssize_t)(
-                (float)placement->y +
-                (float)placement->vy * t +
-                ((float)placement->ay * t * t) / 2.0f
-            );
+            if (placement->anim_fn != NULL) {
+                base_x = placement->x;
+                base_y = placement->y;
+                placement->anim_fn(placement->anim_priv, &base_x, &base_y, t);
+            } else {
+                base_x = (ssize_t)(
+                    (float)placement->x +
+                    (float)placement->vx * t +
+                    ((float)placement->ax * t * t) / 2.0f
+                );
+                base_y = (ssize_t)(
+                    (float)placement->y +
+                    (float)placement->vy * t +
+                    ((float)placement->ay * t * t) / 2.0f
+                );
+            }
 
             for (sy = 0; sy < sprite->height; sy++) {
                 for (sx = 0; sx < sprite->width; sx++) {

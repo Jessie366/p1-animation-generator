@@ -91,6 +91,9 @@ struct sprite_placement *animate_place_sprite(struct canvas *canvas,
     placement->ax = 0;
     placement->ay = 0;
 
+    placement->anim_fn = NULL;
+    placement->anim_priv = NULL;
+
     placement->prev = NULL;
     placement->next = NULL;
 
@@ -126,6 +129,16 @@ void animate_set_animation_params(struct sprite_placement *sprite_placement,
     sprite_placement->vy = vy;
     sprite_placement->ax = ax;
     sprite_placement->ay = ay;
+}
+
+void animate_set_animation_function(struct sprite_placement *sprite_placement,
+                                    animate_fn fn, void *priv) {
+    if (sprite_placement == NULL) {
+        return;
+    }
+
+    sprite_placement->anim_fn = fn;
+    sprite_placement->anim_priv = priv;
 }
 
 void animate_placement_top(struct sprite_placement *sprite_placement) {
