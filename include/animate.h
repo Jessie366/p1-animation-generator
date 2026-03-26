@@ -15,8 +15,8 @@
 
 /* Forward declarations - these are opaque pointers */
 struct canvas;
-struct spring;
-struct spring_placement;
+struct sprite;
+struct sprite_placement;
 
 /**
  * @brief Representation of a pixel color in ARGB32 format.
@@ -88,9 +88,9 @@ void animate_destroy_canvas(struct canvas* canvas);
  * For simplicity, reverse the order of rows while loading the bitmap.
  *
  * @param file The name of the bitmap file to be loaded
- * @return struct spring* A handle to the created sprite, or NULL on error
+ * @return struct sprite* A handle to the created sprite, or NULL on error
  */
-struct spring* animate_create_sprite(const char* file);
+struct sprite* animate_create_sprite(const char* file);
 
 /**
  * @brief Create a sprite that represents a rectangle.
@@ -99,9 +99,9 @@ struct spring* animate_create_sprite(const char* file);
  * @param height The height of the rectangle
  * @param c The colour of the rectangle
  * @param filled true if the rectangle should be filled, otherwise false (border only)
- * @return struct spring* A handle to the created sprite
+ * @return struct sprite* A handle to the created sprite
  */
-struct spring* animate_create_rectangle(size_t width, size_t height, color_t c, bool filled);
+struct sprite* animate_create_rectangle(size_t width, size_t height, color_t c, bool filled);
 
 /**
  * @brief Create a sprite that represents a circle.
@@ -116,9 +116,9 @@ struct spring* animate_create_rectangle(size_t width, size_t height, color_t c, 
  * @param radius The radius of the circle
  * @param c The colour of the circle
  * @param filled Reserved for future use (must be true)
- * @return struct spring* A handle to the created sprite
+ * @return struct sprite* A handle to the created sprite
  */
-struct spring* animate_create_circle(size_t radius, color_t c, bool filled);
+struct sprite* animate_create_circle(size_t radius, color_t c, bool filled);
 
 /**
  * @brief Frees all memory associated with a sprite.
@@ -126,7 +126,7 @@ struct spring* animate_create_circle(size_t radius, color_t c, bool filled);
  * @param sprite The sprite to clean up
  * @return true on success, false if the sprite is still in use (has active placements)
  */
-bool animate_destroy_sprite(struct spring* sprite);
+bool animate_destroy_sprite(struct sprite* sprite);
 
 /**
  * @brief Places a sprite on the top layer of the canvas.
@@ -135,9 +135,9 @@ bool animate_destroy_sprite(struct spring* sprite);
  * @param sprite The sprite to place
  * @param x The x coordinate of the canvas to which the top left pixel of the sprite should be placed
  * @param y The y coordinate of the canvas to which the top left pixel of the sprite should be placed
- * @return struct spring_placement* A handle to the sprite placement
+ * @return struct sprite_placement* A handle to the sprite placement
  */
-struct spring_placement* animate_place_sprite(struct canvas* canvas, struct spring* sprite,
+struct sprite_placement* animate_place_sprite(struct canvas* canvas, struct sprite* sprite,
                                                ssize_t x, ssize_t y);
 
 /**
@@ -145,35 +145,35 @@ struct spring_placement* animate_place_sprite(struct canvas* canvas, struct spri
  *
  * @param sprite_placement A handle to the placement
  */
-void animate_placement_up(struct spring_placement* sprite_placement);
+void animate_placement_up(struct sprite_placement* sprite_placement);
 
 /**
  * @brief Lower a sprite one level towards the bottom layer.
  *
  * @param sprite_placement A handle to the placement
  */
-void animate_placement_down(struct spring_placement* sprite_placement);
+void animate_placement_down(struct sprite_placement* sprite_placement);
 
 /**
  * @brief Raise the sprite to the top-most layer.
  *
  * @param sprite_placement A handle to the placement
  */
-void animate_placement_top(struct spring_placement* sprite_placement);
+void animate_placement_top(struct sprite_placement* sprite_placement);
 
 /**
  * @brief Lower the sprite to the bottom-most layer.
  *
  * @param sprite_placement A handle to the placement
  */
-void animate_placement_bottom(struct spring_placement* sprite_placement);
+void animate_placement_bottom(struct sprite_placement* sprite_placement);
 
 /**
  * @brief Removes the placement from its associated canvas and free resources.
  *
  * @param sprite_placement A handle to the placement
  */
-void animate_destroy_placement(struct spring_placement* sprite_placement);
+void animate_destroy_placement(struct sprite_placement* sprite_placement);
 
 /**
  * @brief Configure sprite animation.
@@ -186,7 +186,7 @@ void animate_destroy_placement(struct spring_placement* sprite_placement);
  * @param ax The acceleration in the x direction
  * @param ay The acceleration in the y direction
  */
-void animate_set_animation_params(struct spring_placement* sprite_placement,
+void animate_set_animation_params(struct sprite_placement* sprite_placement,
                                   ssize_t vx, ssize_t vy,
                                   ssize_t ax, ssize_t ay);
 
@@ -197,7 +197,7 @@ void animate_set_animation_params(struct spring_placement* sprite_placement,
  * @param fn A custom function to call when determining the position of the placement
  * @param priv Private data that is passed to the function
  */
-void animate_set_animation_function(struct spring_placement* sprite_placement,
+void animate_set_animation_function(struct sprite_placement* sprite_placement,
                                      animate_fn fn, void* priv);
 
 /**
