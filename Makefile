@@ -17,15 +17,17 @@ INC_DIR = include
 # Default target: compile animate.o for submission
 all: animate.o
 
-# Compile all source files into individual .o files, then archive into animate.a
-# The marking system will compile this into a shared object
+# Compile all source files into individual .o files, then partial-link into
+# a single relocatable animate.o so the marking system can build a shared
+# object with all symbols exported (ld -r avoids the archive empty-symbol
+# problem that occurs when gcc -shared is passed a plain .a).
 animate.o: $(SRCS) $(INC_DIR)/animate.h $(SRC_DIR)/animate_internal.h
 	$(CC) $(CFLAGS) -I$(INC_DIR) -c $(SRC_DIR)/canvas.c -o canvas.o
 	$(CC) $(CFLAGS) -I$(INC_DIR) -c $(SRC_DIR)/sprite.c -o sprite.o
 	$(CC) $(CFLAGS) -I$(INC_DIR) -c $(SRC_DIR)/placement.c -o placement.o
 	$(CC) $(CFLAGS) -I$(INC_DIR) -c $(SRC_DIR)/frame.c -o frame.o
 	ar rcs animate.a canvas.o sprite.o placement.o frame.o
-	cp animate.a animate.o
+	ld -r canvas.o sprite.o placement.o frame.o -o animate.o
 	rm -f canvas.o sprite.o placement.o frame.o
 
 # Clean build artifacts
