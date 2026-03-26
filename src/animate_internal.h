@@ -41,8 +41,8 @@ struct canvas {
     size_t width;
     color_t background_color;
 
-    struct sprite_placement *front; /* bottom layer */
-    struct sprite_placement *back;  /* top layer */
+    struct sprite_placement *head; /* bottom-most */
+    struct sprite_placement *tail; /* top-most */
 };
 
 #endif /* ANIMATE_INTERNAL_H */

@@ -12,8 +12,8 @@ struct canvas *animate_create_canvas(size_t height, size_t width,
     canvas->height = height;
     canvas->width = width;
     canvas->background_color = background_color;
-    canvas->front = NULL;
-    canvas->back = NULL;
+    canvas->head = NULL;
+    canvas->tail = NULL;
 
     return canvas;
 }
@@ -26,7 +26,7 @@ void animate_destroy_canvas(struct canvas *canvas) {
         return;
     }
 
-    curr = canvas->front;
+    curr = canvas->head;
     while (curr != NULL) {
         next = curr->next;
 
