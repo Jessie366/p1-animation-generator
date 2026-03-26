@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/jessieyin/p1/tests/test_sprite_circle'
+relocations:     []
+...
