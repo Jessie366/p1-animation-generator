@@ -63,12 +63,11 @@ static inline color_t animate_color_argb(unsigned a, unsigned r, unsigned g, uns
 /**
  * @brief Create the canvas on which our animation will be built.
  *
- * @param height Height of the drawing area in pixels
  * @param width Width of the drawing area in pixels
- * @param background_color The colour to use when no sprites overlap a pixel.
+ * @param height Height of the drawing area in pixels
  * @return struct canvas* Abstract data type for the canvas.
  */
-struct canvas* animate_create_canvas(size_t height, size_t width, color_t background_color);
+struct canvas* animate_create_canvas(uint16_t width, uint16_t height);
 
 /**
  * @brief Clean up a canvas.
