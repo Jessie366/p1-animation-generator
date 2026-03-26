@@ -1,3 +1,4 @@
+#include <limits.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -184,6 +185,10 @@ struct sprite *animate_create_rectangle(size_t width, size_t height, color_t c,
     size_t x;
     size_t y;
 
+    if (width == 0 || height == 0) {
+        return NULL;
+    }
+
     sprite = malloc(sizeof(*sprite));
     if (sprite == NULL) {
         return NULL;
@@ -224,6 +229,14 @@ struct sprite *animate_create_circle(size_t radius, color_t c, bool filled) {
     size_t rr;
 
     (void)filled;
+
+    /* Guard: 2*radius+1 and radius*radius must not overflow size_t. */
+    if (radius > SIZE_MAX / 2 - 1) {
+        return NULL;
+    }
+    if (radius != 0 && radius > SIZE_MAX / radius) {
+        return NULL;
+    }
 
     diameter = 2 * radius + 1;
     center = radius;

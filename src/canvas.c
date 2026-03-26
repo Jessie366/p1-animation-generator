@@ -2,6 +2,9 @@
 
 #include "animate_internal.h"
 
+/* canvas owns placements, not sprites.
+   placement holds one counted reference to sprite. */
+
 struct canvas *animate_create_canvas(size_t height, size_t width,
                                      color_t background_color) {
     struct canvas *canvas = malloc(sizeof(*canvas));
@@ -28,13 +31,9 @@ void animate_destroy_canvas(struct canvas *canvas) {
 
     curr = canvas->head;
     while (curr != NULL) {
+        /* Save next before animate_destroy_placement zeros it via detach. */
         next = curr->next;
-
-        if (curr->sprite != NULL && curr->sprite->ref_count > 0) {
-            curr->sprite->ref_count--;
-        }
-
-        free(curr);
+        animate_destroy_placement(curr);
         curr = next;
     }
 

@@ -62,6 +62,7 @@ void animate_generate_frame(struct canvas *canvas,
         size_t sy;
 
         if (sprite != NULL) {
+            /* float->ssize_t truncates toward zero (C11 §6.3.1.4). */
             base_x = (ssize_t)(
                 (float)placement->x +
                 (float)placement->vx * t +
