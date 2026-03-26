@@ -1,0 +1,18 @@
+# Build artifacts
+animate.o
+._int_*.o
+test_simple
+simple.dat
+
+# Test binaries
+tests/test_*
+!tests/test_*.c
+!tests/run_all_tests.sh
+
+# macOS debug symbols
+*.dSYM/
+
+# Doxygen output
+Doxyfile
+latex/
+PointerProAnimateRefman.pdf
