@@ -12,31 +12,37 @@
 #include "animate.h"
 
 struct sprite {
-    uint16_t width;
-    uint16_t height;
-    uint32_t *pixels;      // sprite 自己唯一持有的一份像素数据
-    size_t ref_count;      // 当前有多少 placement 正在引用它
+    size_t width;
+    size_t height;
+    color_t *pixels;
+    size_t ref_count;
 };
 
-struct sprite_placement {
-    struct sprite *sprite; // 指向共享 sprite，不复制像素数据
-    int x;
-    int y;
+struct canvas;
 
-    struct canvas *owner;  // 可选，但很适合做一致性检查/解释实现
+struct sprite_placement {
+    struct sprite *sprite;
+    struct canvas *owner;
+
+    ssize_t x;
+    ssize_t y;
+
+    ssize_t vx;
+    ssize_t vy;
+    ssize_t ax;
+    ssize_t ay;
 
     struct sprite_placement *prev;
     struct sprite_placement *next;
 };
 
 struct canvas {
-    uint16_t width;
-    uint16_t height;
+    size_t height;
+    size_t width;
+    color_t background_color;
 
-    struct sprite_placement *front; // 最底层
-    struct sprite_placement *back;  // 最顶层
-
-    size_t placement_count;         // 可选，不是 O(1) 的关键，但便于管理
+    struct sprite_placement *front; /* bottom layer */
+    struct sprite_placement *back;  /* top layer */
 };
 
 #endif /* ANIMATE_INTERNAL_H */

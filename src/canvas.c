@@ -2,17 +2,18 @@
 
 #include "animate_internal.h"
 
-struct canvas *animate_create_canvas(uint16_t width, uint16_t height) {
+struct canvas *animate_create_canvas(size_t height, size_t width,
+                                     color_t background_color) {
     struct canvas *canvas = malloc(sizeof(*canvas));
     if (canvas == NULL) {
         return NULL;
     }
 
-    canvas->width = width;
     canvas->height = height;
+    canvas->width = width;
+    canvas->background_color = background_color;
     canvas->front = NULL;
     canvas->back = NULL;
-    canvas->placement_count = 0;
 
     return canvas;
 }
