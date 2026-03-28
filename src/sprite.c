@@ -171,8 +171,12 @@ struct sprite *animate_create_sprite(const char *file) {
                 return NULL;
             }
 
-            // Force alpha=0xFF for BMP sprites
-            sprite->pixels[dest_row * width + col] = (color_t)(pixel | 0xFF000000u);
+            // Only force opaque for non-BITFIELDS BMPs
+            color_t px = (color_t)pixel;
+            if (bi_compression == 0) {
+                px = px | 0xFF000000u;
+            }
+            sprite->pixels[dest_row * width + col] = px;
         }
     }
 
