@@ -171,7 +171,8 @@ struct sprite *animate_create_sprite(const char *file) {
                 return NULL;
             }
 
-            sprite->pixels[dest_row * width + col] = (color_t)pixel;
+            // Force alpha=0xFF for BMP sprites
+            sprite->pixels[dest_row * width + col] = (color_t)(pixel | 0xFF000000u);
         }
     }
 
