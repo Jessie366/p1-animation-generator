@@ -120,7 +120,7 @@ struct sprite *animate_create_sprite(const char *file) {
         return NULL;
     }
 
-    if (bi_compression != 0) {
+    if (bi_compression != 0 && bi_compression != 3) {
         fclose(fp);
         return NULL;
     }
