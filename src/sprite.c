@@ -277,14 +277,14 @@ struct sprite *animate_create_circle(size_t radius, color_t c, bool filled) {
 
 bool animate_destroy_sprite(struct sprite *sprite) {
     if (sprite == NULL) {
-        return false;
+        return true;   // error
     }
 
     if (sprite->ref_count != 0) {
-        return false;
+        return true;   // error: still in use
     }
 
     free(sprite->pixels);
     free(sprite);
-    return true;
+    return false;      // 0 = success
 }
