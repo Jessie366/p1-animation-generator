@@ -14,7 +14,7 @@ void test_create_rectangle_filled(void) {
     printf("\n=== Test: Create Filled Rectangle ===\n");
 
     color_t color = animate_color_rgb(255, 0, 0); /* Red */
-    struct spring* sprite = animate_create_rectangle(10, 10, color, true);
+    struct sprite* sprite = animate_create_rectangle(10, 10, color, true);
     TEST_ASSERT_NOT_NULL(sprite);
 
     /* Check dimensions */
@@ -28,7 +28,7 @@ void test_create_rectangle_border(void) {
     printf("\n=== Test: Create Border Rectangle ===\n");
 
     color_t color = animate_color_rgb(0, 255, 0); /* Green */
-    struct spring* sprite = animate_create_rectangle(5, 5, color, false);
+    struct sprite* sprite = animate_create_rectangle(5, 5, color, false);
     TEST_ASSERT_NOT_NULL(sprite);
 
     /* Clean up */
@@ -39,7 +39,7 @@ void test_create_circle(void) {
     printf("\n=== Test: Create Circle ===\n");
 
     color_t color = animate_color_rgb(0, 0, 255); /* Blue */
-    struct spring* sprite = animate_create_circle(5, color, true);
+    struct sprite* sprite = animate_create_circle(5, color, true);
     TEST_ASSERT_NOT_NULL(sprite);
 
     /* Clean up */
@@ -52,11 +52,11 @@ void test_destroy_sprite_with_refcount(void) {
     struct canvas* canvas = animate_create_canvas(100, 100, 0);
     TEST_ASSERT_NOT_NULL(canvas);
 
-    struct spring* sprite = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), true);
+    struct sprite* sprite = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), true);
     TEST_ASSERT_NOT_NULL(sprite);
 
     /* Place sprite on canvas (increments ref_count) */
-    struct spring_placement* placement = animate_place_sprite(canvas, sprite, 0, 0);
+    struct sprite_placement* placement = animate_place_sprite(canvas, sprite, 0, 0);
     TEST_ASSERT_NOT_NULL(placement);
 
     /* Try to destroy sprite while it's in use - should fail */
@@ -78,7 +78,7 @@ void test_null_sprite_creation(void) {
     printf("\n=== Test: NULL Sprite Creation ===\n");
 
     /* Creating sprite from NULL file should return NULL */
-    struct spring* sprite = animate_create_sprite(NULL);
+    struct sprite* sprite = animate_create_sprite(NULL);
     TEST_ASSERT_NULL(sprite);
 
     /* This test always passes if we reach here without crashing */

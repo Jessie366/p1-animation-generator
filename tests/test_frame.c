@@ -18,11 +18,11 @@ void test_generate_frame_basic(void) {
     TEST_ASSERT_NOT_NULL(canvas);
 
     /* Create red rectangle */
-    struct spring* sprite = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), true);
+    struct sprite* sprite = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), true);
     TEST_ASSERT_NOT_NULL(sprite);
 
     /* Place sprite at (5, 5) */
-    struct spring_placement* placement = animate_place_sprite(canvas, sprite, 5, 5);
+    struct sprite_placement* placement = animate_place_sprite(canvas, sprite, 5, 5);
     TEST_ASSERT_NOT_NULL(placement);
 
     /* Allocate frame buffer and generate frame */
@@ -55,7 +55,7 @@ void test_generate_frame_basic(void) {
 
     /* Check a pixel outside the rectangle (should be white background) */
     color_t bg = animate_color_rgb(255, 255, 255);
-    TEST_ASSERT_EQUAL_UINT(bg | 0xFF000000, pixels[0] & 0xFFFFFF00); /* Allow for alpha */
+    TEST_ASSERT_EQUAL_UINT(bg, pixels[0]);
 
     /* Clean up */
     free(frame);
@@ -72,11 +72,11 @@ void test_generate_frame_with_motion(void) {
     TEST_ASSERT_NOT_NULL(canvas);
 
     /* Create blue circle */
-    struct spring* sprite = animate_create_circle(5, animate_color_rgb(0, 0, 255), true);
+    struct sprite* sprite = animate_create_circle(5, animate_color_rgb(0, 0, 255), true);
     TEST_ASSERT_NOT_NULL(sprite);
 
     /* Place sprite with velocity */
-    struct spring_placement* placement = animate_place_sprite(canvas, sprite, 10, 10);
+    struct sprite_placement* placement = animate_place_sprite(canvas, sprite, 10, 10);
     TEST_ASSERT_NOT_NULL(placement);
 
     /* Set velocity: 10 pixels per second in x direction */
@@ -111,11 +111,11 @@ void test_alpha_handling(void) {
     TEST_ASSERT_NOT_NULL(canvas);
 
     /* Create rectangle with border only (hollow) */
-    struct spring* sprite = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), false);
+    struct sprite* sprite = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), false);
     TEST_ASSERT_NOT_NULL(sprite);
 
     /* Place sprite */
-    struct spring_placement* placement = animate_place_sprite(canvas, sprite, 5, 5);
+    struct sprite_placement* placement = animate_place_sprite(canvas, sprite, 5, 5);
     TEST_ASSERT_NOT_NULL(placement);
 
     /* Generate frame */
@@ -140,7 +140,6 @@ void test_alpha_handling(void) {
     TEST_ASSERT_TRUE(has_border);
 
     /* Check that center pixels are transparent (show background) */
-    color_t bg = animate_color_rgb(255, 255, 255);
     uint8_t alpha_center = (pixels[10 * 20 + 10] >> 24) & 0xFF;
     /* Alpha should be 0xFF for background pixels (they're not transparent) */
     TEST_ASSERT_EQUAL_UINT(0xFF, alpha_center);

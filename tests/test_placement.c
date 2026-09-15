@@ -16,10 +16,10 @@ void test_place_sprite(void) {
     struct canvas* canvas = animate_create_canvas(100, 100, 0);
     TEST_ASSERT_NOT_NULL(canvas);
 
-    struct spring* sprite = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), true);
+    struct sprite* sprite = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), true);
     TEST_ASSERT_NOT_NULL(sprite);
 
-    struct spring_placement* placement = animate_place_sprite(canvas, sprite, 5, 10);
+    struct sprite_placement* placement = animate_place_sprite(canvas, sprite, 5, 10);
     TEST_ASSERT_NOT_NULL(placement);
 
     /* Clean up */
@@ -34,17 +34,17 @@ void test_layer_operations(void) {
     struct canvas* canvas = animate_create_canvas(100, 100, 0);
     TEST_ASSERT_NOT_NULL(canvas);
 
-    struct spring* sprite1 = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), true);
-    struct spring* sprite2 = animate_create_rectangle(10, 10, animate_color_rgb(0, 255, 0), true);
-    struct spring* sprite3 = animate_create_rectangle(10, 10, animate_color_rgb(0, 0, 255), true);
+    struct sprite* sprite1 = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), true);
+    struct sprite* sprite2 = animate_create_rectangle(10, 10, animate_color_rgb(0, 255, 0), true);
+    struct sprite* sprite3 = animate_create_rectangle(10, 10, animate_color_rgb(0, 0, 255), true);
     TEST_ASSERT_NOT_NULL(sprite1);
     TEST_ASSERT_NOT_NULL(sprite2);
     TEST_ASSERT_NOT_NULL(sprite3);
 
     /* Place sprites (order: 1, 2, 3 - 3 is on top) */
-    struct spring_placement* p1 = animate_place_sprite(canvas, sprite1, 0, 0);
-    struct spring_placement* p2 = animate_place_sprite(canvas, sprite2, 0, 0);
-    struct spring_placement* p3 = animate_place_sprite(canvas, sprite3, 0, 0);
+    struct sprite_placement* p1 = animate_place_sprite(canvas, sprite1, 0, 0);
+    struct sprite_placement* p2 = animate_place_sprite(canvas, sprite2, 0, 0);
+    struct sprite_placement* p3 = animate_place_sprite(canvas, sprite3, 0, 0);
     TEST_ASSERT_NOT_NULL(p1);
     TEST_ASSERT_NOT_NULL(p2);
     TEST_ASSERT_NOT_NULL(p3);
@@ -77,10 +77,10 @@ void test_animation_params(void) {
     struct canvas* canvas = animate_create_canvas(100, 100, 0);
     TEST_ASSERT_NOT_NULL(canvas);
 
-    struct spring* sprite = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), true);
+    struct sprite* sprite = animate_create_rectangle(10, 10, animate_color_rgb(255, 0, 0), true);
     TEST_ASSERT_NOT_NULL(sprite);
 
-    struct spring_placement* placement = animate_place_sprite(canvas, sprite, 10, 20);
+    struct sprite_placement* placement = animate_place_sprite(canvas, sprite, 10, 20);
     TEST_ASSERT_NOT_NULL(placement);
 
     /* Set animation parameters */

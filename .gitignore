@@ -12,6 +12,7 @@ frame_final.raw
 # Test binaries
 tests/test_*
 !tests/test_*.c
+!tests/test_framework.h
 !tests/run_all_tests.sh
 
 # Archives and packaged references
