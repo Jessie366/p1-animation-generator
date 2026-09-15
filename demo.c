@@ -29,7 +29,7 @@ int main(void) {
 
     /* Create sprites */
     printf("Creating sprites...\n");
-    struct spring* rect = animate_create_rectangle(20, 20,
+    struct sprite* rect = animate_create_rectangle(20, 20,
                                                      animate_color_rgb(255, 0, 0), /* Red */
                                                      true); /* Filled */
     if (rect == NULL) {
@@ -38,7 +38,7 @@ int main(void) {
         return 1;
     }
 
-    struct spring* circle = animate_create_circle(15,
+    struct sprite* circle = animate_create_circle(15,
                                                      animate_color_argb(255, 0, 0, 255), /* Blue */
                                                      true);
     if (circle == NULL) {
@@ -50,7 +50,7 @@ int main(void) {
 
     /* Place sprites on canvas */
     printf("Placing sprites...\n");
-    struct spring_placement* rect_placement = animate_place_sprite(canvas, rect, 10, 10);
+    struct sprite_placement* rect_placement = animate_place_sprite(canvas, rect, 10, 10);
     if (rect_placement == NULL) {
         fprintf(stderr, "Failed to place rectangle\n");
         animate_destroy_sprite(circle);
@@ -59,7 +59,7 @@ int main(void) {
         return 1;
     }
 
-    struct spring_placement* circle_placement = animate_place_sprite(canvas, circle, 50, 50);
+    struct sprite_placement* circle_placement = animate_place_sprite(canvas, circle, 50, 50);
     if (circle_placement == NULL) {
         fprintf(stderr, "Failed to place circle\n");
         animate_destroy_placement(rect_placement);

@@ -1,16 +1,25 @@
 # Build artifacts
 animate.o
+*.o
+*.a
+demo
 ._int_*.o
 test_simple
 simple.dat
+frame_*.raw
+frame_final.raw
 
 # Test binaries
 tests/test_*
 !tests/test_*.c
 !tests/run_all_tests.sh
 
+# Archives and packaged references
+references.zip
+
 # macOS debug symbols
 *.dSYM/
+.DS_Store
 
 # Doxygen output
 Doxyfile
